@@ -1,4 +1,4 @@
-# LNreader
+# django-lnreader
 
 Django app to read light novels.
 
