@@ -17,7 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from lnreader.urls import urlpatterns as lnreader_urls
+
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("reader/", include("lnreader.urls"))
+    path("reader/", include(lnreader_urls))
 ]

@@ -1,11 +1,11 @@
 [tool.poetry]
-name = "lnreader"
+name = "django-lnreader"
 version = "0.1.0"
 description = "Django app to read light novels."
 authors = ["Angel Fuenmayor <32184965+AngelD-F@users.noreply.github.com>"]
 license = "MIT"
 readme = "README.md"
-packages = [{include = "lnreader"}]
+packages = [{include = "lnreader", from = "src"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -14,9 +14,12 @@ Django = "^4.2"
 [tool.poetry.group.dev.dependencies]
 pytest-django = "^4.5.2"
 flake8 = "^6.0.0"
+autopep8 = "^2.0.2"
+python-dotenv = "^1.0.0"
+faker = "^18.4.0"
 
 [tool.pytest.ini_options]
-DJANGO_SETTINGS_MODULE = "lnreader.settings"
+DJANGO_SETTINGS_MODULE = "tests.settings"
 
 [build-system]
 requires = ["poetry-core"]
