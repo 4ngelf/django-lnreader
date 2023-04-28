@@ -27,7 +27,7 @@ def chapter_illustration_path(instance: ChapterIllustration, filename: str) -> s
 class Novel(models.Model):
     title = models.CharField(max_length=80)
     description = models.CharField(max_length=600, blank=True)
-    release_date = models.DateField(blank=True)
+    release_date = models.DateField(blank=True, null=True)
     raws_url = models.URLField(verbose_name="Raws URL", blank=True,
                                help_text="URL to original page the novel was published.")
 
@@ -47,7 +47,7 @@ class NovelCover(models.Model):
 
 class Chapter(models.Model):
     novel = models.ForeignKey(Novel, on_delete=models.CASCADE)
-    number = models.IntegerField()
+    number = models.CharField(max_length=16, unique=True)
     text = models.TextField()
 
     def __str__(self):
@@ -57,7 +57,7 @@ class Chapter(models.Model):
 class ChapterIllustration(models.Model):
     chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE)
     illustration = models.ImageField(upload_to=chapter_illustration_path)
-    order = models.IntegerField()
+    order = models.IntegerField(unique=True)
 
     def __str__(self):
         return f"{self.chapter.novel}: illus {self.chapter.number}-{self.order}"
