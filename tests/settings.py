@@ -30,8 +30,8 @@ SECRET_KEY = os.environ.get("SECRET_KEY") \
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("PRODUCTION") != "true"
-if DEBUG:
-    print("DEBUG MODE IS ON!")
+if not DEBUG:
+    print("ON PRODUCTION!")
 
 ALLOWED_HOSTS = [os.environ.get("DOMAIN") or "127.0.0.1"]
 
