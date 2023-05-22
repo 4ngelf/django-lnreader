@@ -19,7 +19,6 @@
 				// Container specific:
 				"ms-python.python",
 				"njpwerner.autodocstring",
-				"ms-python.isort",
 				"kevinrose.vsc-python-indent",
 				// Must have:
 				"editorconfig.editorconfig",
