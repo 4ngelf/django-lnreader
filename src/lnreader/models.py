@@ -8,17 +8,38 @@ from django.db import models
 UPLOADS_PATH = Path("novels/")
 
 
-def novel_cover_path(instance: NovelCover, filename: str) -> str:
-    stem = f"cover-{instance.id}"
+def novel_cover_path(novel_cover: NovelCover, filename: str) -> str:
+    """Returns path to the cover illustration image file for the novel.
+
+    Args:
+        novel_cover (NovelCover): Model to track the image file.
+        filename (str): Original filename given to the image.
+
+    Returns:
+        str: Returns the next format:
+            '<UPLOADS_PATH>/<novel-id>/cover-<cover-id>.[png|jpg|gif]'
+    """
+    stem = f"cover-{novel_cover.id}"
     path = Path(
-        f"{instance.novel.id}/{filename}").with_stem(stem)
+        f"{novel_cover.novel.id}/{filename}").with_stem(stem)
     return str(UPLOADS_PATH / path)
 
 
-def chapter_illustration_path(instance: ChapterIllustration, filename: str) -> str:
-    stem = f"illus-{instance.chapter.number}-{instance.order}"
+def chapter_illustration_path(chapter_illustration: ChapterIllustration, filename: str) -> str:
+    """Returns path to the illustration image file for the chapter of one novel.
+
+    Args:
+        chapter_illustration (ChapterIllustration): Model to track the image file.
+        filename (str): Original filename given to the image.
+
+    Returns:
+        str: Returns the next format:
+            '<UPLOADS_PATH>/<novel-id>/illustration/
+            illus-<chapter-number>-<illus-order>.[png|jpg|gif]'
+    """
+    stem = f"illus-{chapter_illustration.chapter.number}-{chapter_illustration.order}"
     path = Path(
-        f"{instance.chapter.novel.id}/illustration/{filename}").with_stem(stem)
+        f"{chapter_illustration.chapter.novel.id}/illustration/{filename}").with_stem(stem)
     return str(UPLOADS_PATH / path)
 
 # Create your models here.
