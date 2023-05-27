@@ -1,4 +1,5 @@
 import pytest
+from django.db.utils import IntegrityError
 
 # from faker import Faker
 from lnreader.models import (Novel,
@@ -16,10 +17,11 @@ from lnreader.models import (Novel,
 def create_novel(db, faker):
     def make_novel(**kwargs):
         if 'title' not in kwargs:
-            kwargs['title'] = faker.text(max_nb_chars=Novel.title.max_length)
+            kwargs['title'] = faker.text(
+                max_nb_chars=Novel.title.field.max_length)
         if 'description' not in kwargs:
             kwargs['description'] = faker.text(
-                max_nb_chars=Novel.description.max_length)
+                max_nb_chars=Novel.description.field.max_length)
         if 'release_date' not in kwargs:
             kwargs['release_date'] = faker.date_between(start_date='-20y')
         if 'raws_url' not in kwargs:
@@ -35,7 +37,8 @@ def create_novel_alt_title(db, faker, create_novel):
         if 'novel' not in kwargs:
             kwargs['novel'] = create_novel()
         if 'title' not in kwargs:
-            kwargs['title'] = faker.text(max_nb_chars=Novel.title.max_length)
+            kwargs['title'] = faker.text(
+                max_nb_chars=Novel.title.field.max_length)
 
         return NovelAltTitle.objects.create(**kwargs)
     return make_novel_alt_title
@@ -47,6 +50,7 @@ def create_novel_cover(db, faker, create_novel):
         if 'novel' not in kwargs:
             kwargs['novel'] = create_novel()
         if 'cover' not in kwargs:
+            # TODO
             kwargs['cover'] = 'cover TODO'
 
         return NovelCover.objects.create(**kwargs)
@@ -87,6 +91,7 @@ def create_chapter_illustration(db, faker, create_chapter):
 
 @pytest.mark.django_db
 def test_all_models_create():
+    """Test the empty creation of all models using django.db.models.QuerySet"""
     novel = Novel.objects.create()
     NovelAltTitle.objects.create(novel=novel)
     NovelCover.objects.create(novel=novel)
@@ -98,6 +103,44 @@ def test_all_models_create():
 
 
 @pytest.mark.django_db
-def test_novel_create(create_novel):
-    novel = create_novel
-    assert isinstance(novel, Novel)
+def test_all_fixtures_models_create(
+        create_novel,
+        create_novel_alt_title,
+        create_novel_cover,
+        create_chapter,
+        create_chapter_illustration):
+    assert isinstance(create_novel(), Novel)
+    assert isinstance(create_novel_alt_title(), NovelAltTitle)
+    assert isinstance(create_novel_cover(), NovelCover)
+    assert isinstance(create_chapter(), Chapter)
+    assert isinstance(create_chapter_illustration(), ChapterIllustration)
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    '_model',
+    [NovelAltTitle, NovelCover, Chapter, ChapterIllustration]
+)
+def test_model_raises_on_create_without_reference(_model):
+    with pytest.raises(IntegrityError):
+        _model.objects.create()
+
+
+# @pytest.mark.skip
+def test_novel_cover_path(faker, create_novel_cover, uploads_path):
+    # TODO
+    novelCover = create_novel_cover()
+    dummy_path = uploads_path / faker.file_name(extension='.png')
+
+    expected = f'{uploads_path}/{novelCover.novel.id}/cover-{novelCover.id}.png'
+
+    assert novel_cover_path(NovelCover, dummy_path) == expected
+
+
+@pytest.mark.skip
+def test_chapter_illustration_path(create_chapter_illustration):
+    # TODO
+    chapterIllustration = create_chapter_illustration()
+
+
+pass
