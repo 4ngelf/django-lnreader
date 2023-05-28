@@ -128,19 +128,20 @@ def test_model_raises_on_create_without_reference(_model):
 
 def test_novel_cover_path_function(faker, create_novel_cover, uploads_path):
     novelCover = create_novel_cover()
-    dummy_path = uploads_path / faker.file_name(extension='.png')
+    dummy_file = faker.file_name(extension='.png')
 
     expected = f'{uploads_path}/{novelCover.novel.id}/cover-{novelCover.id}.png'
 
-    assert novel_cover_path(novelCover, dummy_path) == expected
+    assert novel_cover_path(novelCover, dummy_file) == expected
 
 
 def test_chapter_illustration_path_function(faker, create_chapter_illustration, uploads_path):
+def test_chapter_illustration_path_function(faker, create_chapter_illustration, uploads_path):
     chapterIllustration = create_chapter_illustration()
-    dummy_path = uploads_path / faker.file_name(extension='.png')
+    dummy_file = faker.file_name(extension='.png')
 
     expected = f'{uploads_path}/{chapterIllustration.chapter.novel.id}/illustration/' \
         + f'illus-{chapterIllustration.chapter.number}-{chapterIllustration.order}.png'
 
     assert chapter_illustration_path(
-        chapterIllustration, dummy_path) == expected
+        chapterIllustration, dummy_file) == expected
