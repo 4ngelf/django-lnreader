@@ -136,7 +136,6 @@ def test_novel_cover_path_function(faker, create_novel_cover, uploads_path):
 
 
 def test_chapter_illustration_path_function(faker, create_chapter_illustration, uploads_path):
-def test_chapter_illustration_path_function(faker, create_chapter_illustration, uploads_path):
     chapterIllustration = create_chapter_illustration()
     dummy_file = faker.file_name(extension='.png')
 
