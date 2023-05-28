@@ -126,6 +126,7 @@ def test_model_raises_on_create_without_reference(_model):
         _model.objects.create()
 
 
+@pytest.mark.django_db
 def test_novel_cover_path_function(faker, create_novel_cover, uploads_path):
     novelCover = create_novel_cover()
     dummy_file = faker.file_name(extension='.png')
@@ -135,6 +136,7 @@ def test_novel_cover_path_function(faker, create_novel_cover, uploads_path):
     assert novel_cover_path(novelCover, dummy_file) == expected
 
 
+@pytest.mark.django_db
 def test_chapter_illustration_path_function(faker, create_chapter_illustration, uploads_path):
     chapterIllustration = create_chapter_illustration()
     dummy_file = faker.file_name(extension='.png')
@@ -142,5 +144,4 @@ def test_chapter_illustration_path_function(faker, create_chapter_illustration, 
     expected = f'{uploads_path}/{chapterIllustration.chapter.novel.id}/illustration/' \
         + f'illus-{chapterIllustration.chapter.number}-{chapterIllustration.order}.png'
 
-    assert chapter_illustration_path(
-        chapterIllustration, dummy_file) == expected
+    assert chapter_illustration_path(chapterIllustration, dummy_file) == expected
